@@ -1,0 +1,4 @@
+sndhfix
+version.c
+*.o
+*.o.d
