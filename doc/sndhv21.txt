@@ -44,8 +44,8 @@
 ; TD???  Timer D         dc.b 'TD100',0                    0 (Null)
 ; !V??  VBL              dc.b '!V50',0                     0 (Null)
 ; YEAR  Year of release  dc.b '1996',0                     0 (Null) SNHDv2
-; #!??  Default Sub tune dc.b '#!02',0                     0 (Null) SNDHv21
-; #!SN  Sub tune names	 dc.w x1,x2,x3,x4                  None
+; !#??  Default Sub tune dc.b '!#02',0                     0 (Null) SNDHv21
+; !#SN  Sub tune names	 dc.w x1,x2,x3,x4                  None
 ;                        dc.b "Subtune Name 1",0	   0 (Null) SNDHv21
 ;                        dc.b "Subtune Name 2",0	   0 (Null) SNDHv21
 ;                        dc.b "Subtune Name 3",0	   0 (Null) SNDHv21
