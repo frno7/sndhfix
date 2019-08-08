@@ -3,15 +3,19 @@
  * Copyright (C) 2019 Fredrik Noring
  */
 
+#include <errno.h>
 #include <string.h>
 #include <stdlib.h>
 
 #include "sndhfix/assert.h"
 #include "sndhfix/compare.h"
 #include "sndhfix/file.h"
+#include "sndhfix/ice.h"
+#include "sndhfix/memory.h"
 #include "sndhfix/print.h"
 #include "sndhfix/sndh.h"
 #include "sndhfix/string.h"
+#include "sndhfix/tool.h"
 #include "sndhfix/unicode-atari-st.h"
 
 struct tag {
@@ -386,4 +390,34 @@ bool sndh_tags(struct file file, sndh_tag_cb cb, void *arg)
 		pr_warn("%s: missing HDNS tag\n", file.path);
 
 	return tag.continuation;
+}
+
+struct file sndh_read_file(const char *path)
+{
+	struct file file = file_read_or_stdin(path);
+
+	if (!file_valid(file))
+		return file;
+
+	if (ice_identify(file.data, file.size)) {
+		const size_t s = ice_decrunched_size(file.data, file.size);
+		void *b = xmalloc(s);
+
+		if (ice_decrunch(b, file.data, file.size) == -1) {
+			pr_error("%s: ICE decrunch failed\n", file.path);
+
+			free(b);
+			file_free(file);
+			errno = ENOEXEC;
+
+			return (struct file) { };
+		}
+
+		free(file.data);
+		file.size = s;
+		file.data = b;
+	} else if (option_verbosity())
+		pr_warn("%s: not ICE packed\n", file.path);
+
+	return file;
 }

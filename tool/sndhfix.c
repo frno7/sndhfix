@@ -3,19 +3,14 @@
  * Copyright (C) 2019 Fredrik Noring
  */
 
-#include <errno.h>
-#include <fcntl.h>
 #include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/stat.h>
 
 #include "sndhfix/build-bug.h"
 #include "sndhfix/compare.h"
 #include "sndhfix/file.h"
-#include "sndhfix/ice.h"
-#include "sndhfix/memory.h"
 #include "sndhfix/print.h"
 #include "sndhfix/sndh.h"
 #include "sndhfix/sndh-print.h"
@@ -115,21 +110,11 @@ int main(int argc, char *argv[])
 	for (int arg = optind; arg < argc; arg++) {
 		const char *input = argv[arg];
 
-		struct file file = file_read_or_stdin(input);
+		struct file file = sndh_read_file(input);
 		if (!file_valid(file)) {
 			pr_errno("%s\n", input);
 			continue;
 		}
-
-		if (ice_identify(file.data, file.size)) {
-			size_t s = ice_decrunched_size(file.data, file.size);
-			void *b = xmalloc(s);
-
-			file.size = ice_decrunch(b, file.data, file.size);
-			free(file.data);
-			file.data = b;
-		} else if (option_verbosity())
-			pr_warn("%s: not ICE packed\n", file.path);
 
 		sndh_print(file);
 
