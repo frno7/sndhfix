@@ -87,9 +87,6 @@ static bool sndh_string__(const char *name, struct tag *tag, size_t length,
 {
 	char *c = file.data;
 
-	if (!sndh_tag(name, offset, bound, file))
-		return false;
-
 	if (!length) {
 		tag->value = &c[*offset];
 
@@ -132,10 +129,7 @@ static bool sndh_string(const char *name, struct tag *tag, size_t length,
 static bool sndh_substrings(const char *name, struct tag *tag, size_t length,
 	size_t *offset, size_t bound, struct file file)
 {
-	const size_t table_start = *offset;
-
-	if (!sndh_tag(name, offset, bound, file))
-		return false;
+	const size_t table_start = *offset - strlen(name);
 
 	if (!tag->subtunes) {
 		pr_warn("%s: tag %s without any subtunes\n", file.path, name);
@@ -222,9 +216,6 @@ static bool sndh_subtunes(const char *name, struct tag *tag, size_t length,
 static bool sndh_time(const char *name, struct tag *tag, size_t length,
 	size_t *offset, size_t bound, struct file file)
 {
-	if (!sndh_tag(name, offset, bound, file))	// FIXME: Do once
-		return false;
-
 	if (!tag->subtunes) {
 		pr_warn("%s: tag %s without any subtunes\n", file.path, name);
 
@@ -255,9 +246,6 @@ static bool sndh_time(const char *name, struct tag *tag, size_t length,
 static bool sndh_hdns(const char *name, struct tag *tag, size_t length,
 	size_t *offset, size_t bound, struct file file)
 {
-	if (!sndh_tag(name, offset, bound, file))
-		return false;
-
 	tag->hdns = true;
 
 	return true;
@@ -354,7 +342,8 @@ static bool match_tag(struct tag *tag, size_t *offset,
 	};
 
 	for (size_t i = 0; i < ARRAY_SIZE(tags); i++)
-		if (tags[i].read(tags[i].name, tag,
+		if (sndh_tag(tags[i].name, offset, bound, file) &&
+		    tags[i].read(tags[i].name, tag,
 				 tags[i].length, offset,
 				 bound, file))
 			return true;
