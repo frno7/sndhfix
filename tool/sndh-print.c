@@ -82,11 +82,11 @@ static bool print_tag(const char *name, const char *value, void *arg)
 
 void sndh_print(struct file file)
 {
-		struct print_context context = {
-			.file = file,
-		};
+	struct print_context context = {
+		.file = file,
+	};
 
-		printf("path %s\n", file.path);
+	printf("path %s\n", file.path);
 
-		sndh_tags(file, print_tag, &context);
+	sndh_tags(file, print_tag, &context);
 }
