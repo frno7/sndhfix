@@ -10,6 +10,7 @@
 #include "sndhfix/compare.h"
 #include "sndhfix/macro.h"
 #include "sndhfix/print.h"
+#include "sndhfix/sha256.h"
 #include "sndhfix/string.h"
 #include "sndhfix/tool.h"
 
@@ -90,6 +91,12 @@ void NORETURN pr_bug(const char *file, int line,
 		progname, file, line, func, expr);
 
 	exit(EXIT_FAILURE);
+}
+
+void pr_sha256(struct sha256 sha256)
+{
+	for (size_t i = 0; i < ARRAY_SIZE(sha256.d); i++)
+		printf("%02x", sha256.d[i]);
 }
 
 static void pr_printables(FILE *f,

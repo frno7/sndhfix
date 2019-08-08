@@ -7,6 +7,7 @@
 #include <stdio.h>
 
 #include "sndhfix/macro.h"
+#include "sndhfix/sha256.h"
 
 void pr_info(const char *fmt, ...)
 	__attribute__((format(printf, 1, 2)));
@@ -27,6 +28,8 @@ void NORETURN pr_fatal_errno(const char *s);
 
 void NORETURN pr_bug(const char *file, int line,
 	const char *func, const char *expr);
+
+void pr_sha256(struct sha256 sha256);
 
 void pr_mem(FILE *f, const void *data, size_t size, size_t offset);
 
