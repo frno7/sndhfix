@@ -355,9 +355,12 @@ static bool match_tag(struct tag *tag, size_t *offset,
 	return false;
 }
 
-bool sndh_tags(struct file file, sndh_tag_cb cb, void *arg)
+bool sndh_tags(struct file file, size_t *size, sndh_tag_cb cb, void *arg)
 {
 	size_t offset = sndh_head_offset(file);
+
+	if (size)
+		*size = 0;
 
 	if (!offset) {
 		pr_error("%s: invalid SNDH header\n", file.path);
@@ -383,8 +386,14 @@ bool sndh_tags(struct file file, sndh_tag_cb cb, void *arg)
 				min(bound - offset, 256ul), offset);
 			fprintf(stderr, "\n");
 
+			if (size)
+				*size = offset;
+
 			return false;
 		}
+
+	if (size)
+		*size = offset;
 
 	if (tag.continuation && !tag.hdns)
 		pr_warn("%s: missing HDNS tag\n", file.path);

@@ -37,12 +37,13 @@ typedef bool (*sndh_tag_cb)(const char *name, const char *value, void *arg);
 /**
  * sndh_tags - iterate over all SNDH tags
  * @file: file with SNDH data
+ * @size: store total tag size, unless %NULL
  * @cb: callback to invoke for each tag
  * @arg: optional pointer passed on to the callback; can be %NULL
  *
  * Return: %true on successful completion, otherwise %false
  */
-bool sndh_tags(struct file file, sndh_tag_cb cb, void *arg);
+bool sndh_tags(struct file file, size_t *size, sndh_tag_cb cb, void *arg);
 
 struct file sndh_read_file(const char *path);
 

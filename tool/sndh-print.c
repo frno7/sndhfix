@@ -91,8 +91,12 @@ void sndh_print(struct file file)
 	struct print_context context = {
 		.file = file,
 	};
+	size_t tag_size;
 
 	printf("path %s\n", file.path);
 
-	sndh_tags(file, print_tag, &context);
+	if (sndh_tags(file, &tag_size, print_tag, &context))
+		printf("tag size %zu valid\n", tag_size);
+	else
+		printf("tag size %zu invalid\n", tag_size);
 }
