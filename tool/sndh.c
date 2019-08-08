@@ -374,7 +374,7 @@ bool sndh_tags(struct file file, sndh_tag_cb cb, void *arg)
 
 	const size_t bound = tag_bound(file);
 	struct tag tag = {
-		.subtunes = 1,
+		.subtunes = 1,	/* Default to 1, unless the ## tag is given */
 		.cb = cb,
 		.arg = arg,
 		.continuation = true
