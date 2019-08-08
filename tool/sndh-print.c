@@ -99,4 +99,5 @@ void sndh_print(struct file file)
 		printf("tag size %zu valid\n", tag_size);
 	else
 		printf("tag size %zu invalid\n", tag_size);
+	printf("data size %zu\n", file.size - tag_size);
 }
