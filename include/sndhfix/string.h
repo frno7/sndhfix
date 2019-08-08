@@ -1,4 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0
+/*
+ * Copyright (C) 2019 Fredrik Noring
+ */
 
 #ifndef SNDHFIX_STRING_H
 #define SNDHFIX_STRING_H
@@ -53,5 +56,15 @@ struct string_split next_string_split(
 	for ((split) = first_string_split((str), (sep), strstr);	\
 	     (split).s;							\
 	     (split) = next_string_split((split), (sep), strstr))
+
+/**
+ * strrep - substitute each matching substring in a given string
+ * @s: string to substitute substrings in
+ * @from: substring to match
+ * @to: replacement substring
+ *
+ * Return: allocated substituted string
+ */
+char *strrep(const char *s, const char *from, const char *to);
 
 #endif /* SNDHFIX_STRING_H */

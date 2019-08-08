@@ -1,7 +1,13 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * Copyright (C) 2019 Fredrik Noring
+ */
+
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include "sndhfix/assert.h"
 #include "sndhfix/memory.h"
 #include "sndhfix/print.h"
 #include "sndhfix/string.h"
@@ -103,4 +109,39 @@ struct string_split next_string_split(
 {
 	return split.eos ? (struct string_split) { } :
 		first_string_split(&split.s[split.length], sep, find);
+}
+
+char *strrep(const char *s, const char *from, const char *to)
+{
+	const size_t s_len = strlen(s);
+	const size_t from_len = strlen(from);
+	const size_t to_len = strlen(to);
+	struct string_split split;
+
+	size_t n = 0;
+	for_each_string_split (split, s, from)
+		if (split.sep)
+			n++;
+
+	const size_t t_len = to_len < from_len ?
+		s_len - (from_len - to_len) * n :
+		s_len + (to_len - from_len) * n;
+
+	char *t = xmalloc(t_len + 1);
+
+	size_t i = 0;
+	for_each_string_split (split, s, from)
+		if (split.sep) {
+			memcpy(&t[i], to, to_len);
+			i += to_len;
+		} else {
+			memcpy(&t[i], split.s, split.length);
+			i += split.length;
+		}
+
+	BUG_ON(i != t_len);
+
+	t[i] = '\0';
+
+	return t;
 }

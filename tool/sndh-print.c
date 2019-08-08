@@ -4,12 +4,14 @@
  */
 
 #include <ctype.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "sndhfix/file.h"
 #include "sndhfix/print.h"
 #include "sndhfix/sndh.h"
 #include "sndhfix/sndh-print.h"
+#include "sndhfix/string.h"
 
 struct print_context {
 	struct file file;
