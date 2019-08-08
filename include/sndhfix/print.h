@@ -14,19 +14,16 @@ void pr_info(const char *fmt, ...)
 void pr_warn(const char *msg, ...)
 	__attribute__((format(printf, 1, 2)));
 
-void pr_warn_errno(const char *fmt, ...)
-	__attribute__((format(printf, 1, 2)));
+void pr_warn_errno(const char *s);
 
-void pr_errno(const char *fmt, ...)
-	__attribute__((format(printf, 1, 2)));
+void pr_errno(const char *s);
 
 void pr_error(const char *fmt, ...);
 
 void NORETURN pr_fatal_error(const char *fmt, ...)
 	__attribute__((format(printf, 1, 2)));
 
-void NORETURN pr_fatal_errno(const char *fmt, ...)
-	__attribute__((format(printf, 1, 2)));
+void NORETURN pr_fatal_errno(const char *s);
 
 void NORETURN pr_bug(const char *file, int line,
 	const char *func, const char *expr);

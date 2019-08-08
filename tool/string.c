@@ -12,7 +12,7 @@ char *xstrdup(const char *s)
 	void *t = strdup(s);
 
 	if (!t)
-		pr_fatal_errno("strdup\n");
+		pr_fatal_errno("strdup");
 
 	return t;
 }
@@ -35,7 +35,7 @@ char *xstrndup(const char *s, size_t n)
 	void *t = strndup(s, n);
 
 	if (!t)
-		pr_fatal_errno("strndup\n");
+		pr_fatal_errno("strndup");
 
 	return t;
 }

@@ -48,24 +48,9 @@ void pr_warn(const char *fmt, ...)
 	va_end(ap);
 }
 
-void pr_warn_errno(const char *fmt, ...)
+void pr_warn_errno(const char *s)
 {
-	va_list ap;
-
-	va_start(ap, fmt);
-	report("warning", strerror(errno), fmt, ap);
-	va_end(ap);
-
-	exit(EXIT_FAILURE);
-}
-
-void pr_errno(const char *fmt, ...)
-{
-	va_list ap;
-
-	va_start(ap, fmt);
-	report("error", strerror(errno), fmt, ap);
-	va_end(ap);
+	pr_warn("%s: %s\n", s, strerror(errno));
 }
 
 void pr_error(const char *fmt, ...)
@@ -75,6 +60,11 @@ void pr_error(const char *fmt, ...)
 	va_start(ap, fmt);
 	report("error", "", fmt, ap);
 	va_end(ap);
+}
+
+void pr_errno(const char *s)
+{
+	pr_error("%s: %s\n", s, strerror(errno));
 }
 
 void NORETURN pr_fatal_error(const char *fmt, ...)
@@ -88,15 +78,9 @@ void NORETURN pr_fatal_error(const char *fmt, ...)
 	exit(EXIT_FAILURE);
 }
 
-void NORETURN pr_fatal_errno(const char *fmt, ...)
+void NORETURN pr_fatal_errno(const char *s)
 {
-	va_list ap;
-
-	va_start(ap, fmt);
-	report("error", strerror(errno), fmt, ap);
-	va_end(ap);
-
-	exit(EXIT_FAILURE);
+	pr_fatal_error("%s: %s\n", s, strerror(errno));
 }
 
 void NORETURN pr_bug(const char *file, int line,

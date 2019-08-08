@@ -12,7 +12,7 @@ void *xmalloc(size_t size)
 	void *p = malloc(size);
 
 	if (!p)
-		pr_fatal_errno("malloc\n");
+		pr_fatal_errno("malloc");
 
 	return p;
 }
@@ -31,7 +31,7 @@ void *xrealloc(void *ptr, size_t size)
 	void *p = realloc(ptr, size);
 
 	if (!p)
-		pr_fatal_errno("realloc\n");
+		pr_fatal_errno("realloc");
 
 	return p;
 }

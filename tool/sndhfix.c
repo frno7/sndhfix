@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
 
 		struct file file = sndh_read_file(input);
 		if (!file_valid(file)) {
-			pr_errno("%s\n", input);
+			pr_errno(input);
 			continue;
 		}
 
