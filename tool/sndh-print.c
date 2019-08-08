@@ -60,24 +60,28 @@ static bool print_tag(const char *name, const char *value, void *arg)
 		pr_warn("%s: tag %s malformed whitespace\n",
 			context->file.path, name);
 
+	char *v = strrep(value, "\n", "\n\t");
+
 	if (strcmp(name, "TIME") == 0) {
 		printf("tag field %s %d %s\n",
-			name, ++context->time_count, value);
+			name, ++context->time_count, v);
 	} else if (strcmp(name, "!#SN") == 0) {
 		printf("tag field %s %d %s\n",
-			name, ++context->subname_count, value);
+			name, ++context->subname_count, v);
 	} else if (strcmp(name, "FLAG~") == 0) {	// FIXME: doc/sndhv21.txt
-		printf("tag field FLAG ~ %s", value);
-		print_flags(value, context->file);
+		printf("tag field FLAG ~ %s", v);
+		print_flags(v, context->file);
 		printf("\n");
 	} else if (strcmp(name, "FLAG") == 0) {
 		printf("tag field %s %d %s",
-			name, ++context->subflag_count, value);
-		print_flags(value, context->file);
+			name, ++context->subflag_count, v);
+		print_flags(v, context->file);
 		printf("\n");
 	} else
 		printf("tag field %s%s%s\n",
-			name, name[0] != '\0' ? " " : "", value);
+			name, name[0] != '\0' ? " " : "", v);
+
+	free(v);
 
 	return true;
 }
